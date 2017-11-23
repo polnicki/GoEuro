@@ -1,0 +1,50 @@
+*** Settings ***
+Resource          resources.tsv
+
+*** Test Cases ***
+01 - Wyszukiwanie
+    Page 1
+    Page 2
+    Page 3
+
+*** Keywords ***
+Page 1
+    Open Browser    https://www.goeuro.com/
+    LOG    testing PAGE 1    WARN
+    Wait Until Keyword Succeeds    1m    50ms    Page Should Contain    Best Price
+    # Departure
+    Input Text    id=departureCity    Madrid
+    Click Element    id=departureCity
+    Wait Until Keyword Succeeds    1m    50ms    Element Should Be Visible    xpath=.//*[@id='$desktopSearchform']/div/div[2]/d-departure-position/div/ul/li[1]/div[2]/span[1]
+    Click Element    xpath=.//*[@id='$desktopSearchform']/div/div[2]/d-departure-position/div/ul/li[1]/div[2]/span[1]
+    # Arrival
+    Click Element    id=arrivalCity
+    Input Text    id=arrivalCity    Toledo
+    Click Element    id=arrivalCity
+    Wait Until Keyword Succeeds    1m    50ms    Element Should Be Visible    xpath=.//*[@id='$desktopSearchform']/div/div[2]/d-arrival-position/div/ul/li[1]/div[2]
+    Click Element    xpath=.//*[@id='$desktopSearchform']/div/div[2]/d-arrival-position/div/ul/li[1]/div[2]
+    ##
+    Click Element    id=tripType
+    Focus    xpath=.//*[@id='$desktopSearchform']/div/div[3]/button
+    Wait Until Keyword Succeeds    1m    50ms    Element Should Be Enabled    xpath=.//*[@id='$desktopSearchform']/div/div[3]/button
+    Click Element    xpath=.//*[@id='$desktopSearchform']/div/div[3]/button
+
+Page 2
+    LOG    testing PAGE 2    WARN
+    Select Window    new
+    Wait Until Keyword Succeeds    1m    50ms    Page Should Not Contain    Searching for the best results...
+    Wait Until Keyword Succeeds    1m    50ms    Page Should Contain    Main mode
+    sleep    6s    # need to replace sleep!
+    Click Element    xpath=//div[3]/div/div/div[2]/div[2]/div/div/div/div[2]    #select button
+    sleep    2s    # need to replace sleep!
+    Click Element    xpath=//div[@id='root']/div/div[2]/div/div/div[2]/div[2]/div[2]/div[3]/div/div/div[2]/div[2]/div/div/div[2]/div/div/div/div[3]/div[2]/div/button    #payments button
+
+Page 3
+    LOG    testing PAGE 2    WARN
+    Comment    Sleep    2s    # need to replace sleep!
+    Wait Until Keyword Succeeds    1m    50ms    Page Should Contain    Enter passenger details
+    Input Text    name=passengers.0.components.name.first    Adam
+    Input Text    name=passengers.0.components.name.last    Nowak
+    Input Text    name=passengers.0.components.email.address    aaa@wp.pl
+    #
+    Click Button    xpath=//button[@type='submit']
